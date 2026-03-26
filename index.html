@@ -1,396 +1,383 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geoconsult | Consultoría en Energía Renovable de Alto Nivel</title>
+    <title>GEOCONSULT - Consultoría en Energías Renovables</title>
+    <!-- Tailwind CSS para un diseño moderno y responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Configuración personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        geo: {
+                            light: '#4ade80', // Verde esmeralda claro
+                            DEFAULT: '#059669', // Verde corporativo
+                            dark: '#064e3b', // Verde oscuro profundo
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #10b981;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            background-color: #ffffff;
-            color: var(--primary);
-        }
-        h1, h2, h3, .nav-link, .font-heading {
-            font-family: 'Outfit', sans-serif;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.6) 100%);
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #f8fafc;
         }
         
-        /* Animaciones base */
-        .img-fade-in {
-            animation: fadeIn 2s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(1.05); }
-            to { opacity: 1; transform: scale(1); }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        /* Estilos del Nuevo Menú Interactivo */
-        .tab-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Estilos para el nuevo menú interactivo de imágenes */
+        .visual-menu-item {
             position: relative;
             overflow: hidden;
+            border-radius: 1.5rem; /* rounded-3xl */
+            transform: translateZ(0); /* Forzar aceleración de hardware */
         }
-        .tab-btn.active {
-            background-color: #ffffff;
-            border-color: #10b981;
-            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
-            transform: translateX(10px);
+        
+        .visual-menu-item img {
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .tab-btn.active .icon-container {
-            background-color: #10b981;
-            color: #ffffff;
-        }
-        .tab-btn.active h3 {
-            color: #10b981;
-        }
-        .tab-btn::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #10b981;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-            transform-origin: center;
-        }
-        .tab-btn.active::before {
-            transform: scaleY(1);
+        
+        .visual-menu-item:hover img {
+            transform: scale(1.08);
         }
 
-        /* Paneles de proyección */
-        .tab-panel {
+        .visual-menu-overlay {
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 40%, transparent 100%);
+            transition: opacity 0.4s ease;
+        }
+
+        .visual-menu-content {
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .visual-menu-item:hover .visual-menu-content {
+            transform: translateY(0);
+        }
+
+        .visual-menu-details {
+            max-height: 0;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transform: scale(1.02);
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-        .tab-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-            z-index: 10;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .visual-menu-item:hover .visual-menu-details {
+            max-height: 150px; /* Suficiente para el texto */
+            opacity: 1;
+            margin-top: 0.75rem;
         }
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
+
+        /* Personalización del reproductor de audio */
+        audio::-webkit-media-controls-panel {
+            background-color: #f1f5f9;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="text-slate-800 antialiased selection:bg-geo selection:text-white">
 
-    <!-- Navegación -->
-    <nav class="fixed w-full z-50 glass-nav shadow-sm transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center h-24">
-            <!-- LOGO INTEGRADO AQUÍ CON TAMAÑO ADECUADO -->
-            <!-- Ajuste UI/UX: Se usa h-12 para móvil y h-16 para desktop, logrando un balance perfecto. Se usa .jpg -->
-            <a href="#" class="flex items-center gap-4 group">
-                <img src="logo.png" alt="Logo Geoconsult" class="h-12 md:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50/10b981/ffffff?text=GEOCONSULT'">
-                <div class="flex flex-col hidden sm:flex">
-                    <span class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 font-heading leading-none">GEOCONSULT</span>
-                    <span class="text-[10px] md:text-xs text-slate-500 uppercase tracking-widest font-medium mt-1">Consultoría Energética</span>
-                </div>
-            </a>
-            
-            <div class="hidden md:flex gap-8 items-center">
-                <a href="#servicios" class="nav-link text-sm font-semibold text-slate-600 hover:text-emerald-500 transition-colors">RESUMEN</a>
-                <a href="#soluciones" class="nav-link text-sm font-semibold text-slate-600 hover:text-emerald-500 transition-colors">SOLUCIONES A DETALLE</a>
-                <a href="#contacto" class="bg-slate-900 text-white px-7 py-3 rounded-full text-sm font-bold hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 transition-all">CONTACTO</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Header Hero -->
-    <header class="relative h-screen flex items-center overflow-hidden bg-slate-900">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=2070" 
-                 class="w-full h-full object-cover opacity-50 img-fade-in" alt="Paisaje de Energía Renovable">
-        </div>
-        <div class="absolute inset-0 hero-gradient z-10"></div>
-        
-        <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 w-full mt-20">
-            <div class="max-w-3xl">
-                <span class="text-emerald-400 font-semibold tracking-widest text-sm uppercase mb-4 flex items-center gap-3">
-                    <span class="w-10 h-px bg-emerald-400"></span> Energía para un futuro sostenible
-                </span>
-                <h1 class="text-5xl md:text-7xl font-light text-white leading-tight mb-8">
-                    Consultoría Estratégica en <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Clean Tech</span>
-                </h1>
-                <p class="text-xl text-slate-300 mb-10 leading-relaxed font-light max-w-2xl">
-                    Soluciones integrales en energía geotérmica, solar, eólica y biomasa para corporaciones e industrias de alto nivel buscando eficiencia y sostenibilidad.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#soluciones" class="px-8 py-4 bg-emerald-500 text-white rounded-full font-bold text-center hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/30 text-sm tracking-wide">
-                        EXPLORAR MENÚ DE SERVICIOS
+    <!-- BARRA DE NAVEGACIÓN (HEADER) -->
+    <header class="fixed w-full top-0 z-50 glass-nav border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24"> <!-- Aumenté la altura del header ligeramente -->
+                <!-- LOGO: Parte superior izquierda con tamaño mejorado -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="flex items-center transition-transform hover:scale-105 duration-300 origin-left">
+                        <img class="h-14 sm:h-16 w-auto object-contain drop-shadow-sm" 
+                             src="logo.png" 
+                             alt="GEOCONSULT Logo" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/250x80/059669/ffffff?text=GEOCONSULT+LOGO'">
                     </a>
                 </div>
+
+                <!-- Menú de Navegación Desktop -->
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="#inicio" class="text-slate-600 hover:text-geo font-semibold text-sm uppercase tracking-wide transition-colors duration-200">Inicio</a>
+                    <a href="#especialidades" class="text-slate-600 hover:text-geo font-semibold text-sm uppercase tracking-wide transition-colors duration-200">Especialidades</a>
+                    <a href="#debate" class="text-slate-600 hover:text-geo font-semibold text-sm uppercase tracking-wide transition-colors duration-200">Podcast / Debate</a>
+                    <a href="#contacto" class="px-5 py-2.5 bg-slate-900 text-white hover:bg-geo font-semibold text-sm uppercase tracking-wide rounded-full transition-colors duration-300 shadow-md">Contacto</a>
+                </nav>
+
+                <!-- Botón Menú Móvil (Hamburguesa) -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-geo focus:outline-none p-2">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Móvil Desplegable -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#inicio" class="block px-3 py-3 text-base font-semibold text-slate-700 hover:text-geo hover:bg-slate-50 rounded-xl transition-colors">Inicio</a>
+                <a href="#especialidades" class="block px-3 py-3 text-base font-semibold text-slate-700 hover:text-geo hover:bg-slate-50 rounded-xl transition-colors">Especialidades</a>
+                <a href="#debate" class="block px-3 py-3 text-base font-semibold text-slate-700 hover:text-geo hover:bg-slate-50 rounded-xl transition-colors">Podcast / Debate</a>
+                <a href="#contacto" class="block px-3 py-3 text-base font-semibold text-geo bg-green-50 rounded-xl transition-colors mt-4">Contacto</a>
             </div>
         </div>
     </header>
 
-    <!-- SECCIÓN NUEVA: Menú Interactivo de Proyección -->
-    <section class="py-24 bg-slate-50" id="soluciones">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            
-            <div class="mb-16 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                    <span class="text-emerald-500 font-bold tracking-wider text-sm uppercase mb-3 block">Portafolio Especializado</span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">Soluciones a Detalle</h2>
-                    <div class="h-1.5 w-24 bg-emerald-500 mt-6 rounded-full mx-auto md:mx-0"></div>
-                </div>
-                <p class="text-slate-500 max-w-md text-base md:text-lg">
-                    Explora nuestro menú interactivo. Selecciona un área de ingeniería para conocer el alcance profundo de nuestras capacidades.
+    <!-- SECCIÓN HERO (Inicio) -->
+    <section id="inicio" class="pt-36 pb-20 lg:pt-48 lg:pb-32 bg-gradient-to-br from-slate-50 via-white to-green-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+                Consultoría Estratégica en <br class="hidden md:block">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-geo to-emerald-400">Energías Renovables</span>
+            </h1>
+            <p class="mt-6 max-w-3xl text-lg md:text-xl text-slate-600 mx-auto mb-10 leading-relaxed font-light">
+                En <strong>GEOCONSULT</strong> transformamos el potencial de la naturaleza en soluciones energéticas sostenibles, eficientes y rentables para el futuro de tu empresa.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#especialidades" class="px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-geo hover:bg-geo-dark shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    Conoce nuestros servicios
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVO MENÚ INTERACTIVO DE ESPECIALIDADES CON IMÁGENES -->
+    <section id="especialidades" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-geo font-bold tracking-wider uppercase text-sm mb-2 block">Nuestro Catálogo</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 sm:text-5xl">Áreas de Especialidad</h2>
+                <p class="mt-5 text-lg text-slate-500 max-w-2xl mx-auto font-light">
+                    Explora nuestro menú interactivo. Desarrollamos proyectos integrales adaptados a las necesidades energéticas del mañana. Haz clic o pasa el cursor para ver los detalles.
                 </p>
             </div>
 
-            <!-- Contenedor Principal del Menú y Proyección -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            <!-- Nuevo Menú Visual (Grid Interactivo) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                 
-                <!-- Columna Izquierda: Menú de Navegación -->
-                <div class="lg:col-span-4 flex flex-col gap-4" id="service-menu">
+                <!-- Item: Geotermia -->
+                <a href="#contacto" class="visual-menu-item h-[400px] lg:h-[450px] group shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <img src="geotermia.png" alt="Energía Geotérmica" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518558997970-4ddd2bbdf6da?auto=format&fit=crop&q=80&w=800&h=1000'">
+                    <div class="absolute inset-0 visual-menu-overlay"></div>
                     
-                    <!-- Botón 1: Geotermia -->
-                    <button class="tab-btn active w-full text-left p-6 rounded-2xl border-2 border-slate-200 bg-slate-100/50 hover:bg-white flex items-start gap-4" data-target="panel-geotermia">
-                        <div class="icon-container w-12 h-12 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                        <div class="visual-menu-content">
+                            <!-- Icono decorativo -->
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Geotermia</h3>
+                            <div class="w-10 h-1 bg-geo rounded mb-2"></div>
+                            
+                            <!-- Información Detallada (Aparece en Hover) -->
+                            <div class="visual-menu-details">
+                                <p class="text-slate-200 text-sm leading-relaxed">
+                                    Aprovechamos el calor interno de la tierra para generar energía constante y limpia. Realizamos estudios de viabilidad, exploración y perforación profunda para plantas geotérmicas.
+                                </p>
+                                <span class="inline-block mt-4 text-geo-light font-semibold text-sm uppercase tracking-wide group-hover:underline">Solicitar asesoría &rarr;</span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800 font-heading mb-1 transition-colors">Geotermia</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed">Desarrollo integral y diseño de plantas geotérmicas.</p>
-                        </div>
-                    </button>
+                    </div>
+                </a>
 
-                    <!-- Botón 2: Solar -->
-                    <button class="tab-btn w-full text-left p-6 rounded-2xl border-2 border-slate-200 bg-slate-100/50 hover:bg-white flex items-start gap-4" data-target="panel-solar">
-                        <div class="icon-container w-12 h-12 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <!-- Item: Eólica -->
+                <a href="#contacto" class="visual-menu-item h-[400px] lg:h-[450px] group shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <img src="eolica.png" alt="Energía Eólica" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=800&h=1000'">
+                    <div class="absolute inset-0 visual-menu-overlay"></div>
+                    
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                        <div class="visual-menu-content">
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Eólica</h3>
+                            <div class="w-10 h-1 bg-geo rounded mb-2"></div>
+                            
+                            <div class="visual-menu-details">
+                                <p class="text-slate-200 text-sm leading-relaxed">
+                                    Diseño y optimización de parques eólicos. Evaluamos meticulosamente el recurso de viento para maximizar el rendimiento y la vida útil de los aerogeneradores onshore y offshore.
+                                </p>
+                                <span class="inline-block mt-4 text-geo-light font-semibold text-sm uppercase tracking-wide group-hover:underline">Solicitar asesoría &rarr;</span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800 font-heading mb-1 transition-colors">Solar Fotovoltaica</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed">Proyectos Utility-scale y optimización de seguimiento.</p>
-                        </div>
-                    </button>
+                    </div>
+                </a>
 
-                    <!-- Botón 3: Eólica -->
-                    <button class="tab-btn w-full text-left p-6 rounded-2xl border-2 border-slate-200 bg-slate-100/50 hover:bg-white flex items-start gap-4" data-target="panel-eolica">
-                        <div class="icon-container w-12 h-12 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+                <!-- Item: Solar -->
+                <a href="#contacto" class="visual-menu-item h-[400px] lg:h-[450px] group shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <img src="solar.png" alt="Energía Solar" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=800&h=1000'">
+                    <div class="absolute inset-0 visual-menu-overlay"></div>
+                    
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                        <div class="visual-menu-content">
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Solar</h3>
+                            <div class="w-10 h-1 bg-geo rounded mb-2"></div>
+                            
+                            <div class="visual-menu-details">
+                                <p class="text-slate-200 text-sm leading-relaxed">
+                                    Implementación de sistemas fotovoltaicos y termosolares de alta eficiencia. Soluciones a medida para aplicaciones industriales, granjas solares y corporativos.
+                                </p>
+                                <span class="inline-block mt-4 text-geo-light font-semibold text-sm uppercase tracking-wide group-hover:underline">Solicitar asesoría &rarr;</span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800 font-heading mb-1 transition-colors">Eólica</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed">Parques onshore/offshore y análisis de recurso avanzado.</p>
-                        </div>
-                    </button>
+                    </div>
+                </a>
 
-                    <!-- Botón 4: Biomasa -->
-                    <button class="tab-btn w-full text-left p-6 rounded-2xl border-2 border-slate-200 bg-slate-100/50 hover:bg-white flex items-start gap-4" data-target="panel-biomasa">
-                        <div class="icon-container w-12 h-12 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                <!-- Item: Biomasa -->
+                <a href="#contacto" class="visual-menu-item h-[400px] lg:h-[450px] group shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <img src="biomasa.png" alt="Energía de Biomasa" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=800&h=1000'">
+                    <div class="absolute inset-0 visual-menu-overlay"></div>
+                    
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                        <div class="visual-menu-content">
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Biomasa</h3>
+                            <div class="w-10 h-1 bg-geo rounded mb-2"></div>
+                            
+                            <div class="visual-menu-details">
+                                <p class="text-slate-200 text-sm leading-relaxed">
+                                    Conversión inteligente de residuos orgánicos en biocombustibles. Promovemos la economía circular mediante plantas de cogeneración de última tecnología y eficiencia.
+                                </p>
+                                <span class="inline-block mt-4 text-geo-light font-semibold text-sm uppercase tracking-wide group-hover:underline">Solicitar asesoría &rarr;</span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800 font-heading mb-1 transition-colors">Biomasa & Biogás</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed">Cogeneración a partir de pasivos ambientales (CHP).</p>
-                        </div>
-                    </button>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: PODCAST / DEBATE AUDIO -->
+    <section id="debate" class="py-24 bg-slate-900 relative overflow-hidden">
+        <!-- Decoración de fondo abstracta -->
+        <div class="absolute top-0 right-0 -translate-y-12 translate-x-1/3 opacity-20 pointer-events-none">
+            <svg width="404" height="404" fill="none" viewBox="0 0 404 404"><defs><pattern id="85737c0e-0916-41d7-917f-596dc7edfa27" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="4" height="4" fill="currentColor" class="text-geo"></rect></pattern></defs><rect width="404" height="404" fill="url(#85737c0e-0916-41d7-917f-596dc7edfa27)"></rect></svg>
+        </div>
+        
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-slate-800/80 backdrop-blur-md rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-slate-700/50 flex flex-col md:flex-row items-center gap-10">
+                <!-- Icono/Ilustración -->
+                <div class="flex-shrink-0 relative">
+                    <div class="absolute inset-0 bg-geo blur-2xl opacity-20 rounded-full"></div>
+                    <div class="relative bg-gradient-to-br from-slate-700 to-slate-800 p-8 rounded-full border border-slate-600 shadow-inner">
+                        <svg class="w-16 h-16 text-geo-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                    </div>
                 </div>
-
-                <!-- Columna Derecha: Proyección de Imagen e Información -->
-                <div class="lg:col-span-8 relative rounded-3xl overflow-hidden shadow-2xl h-[550px] lg:h-[650px] bg-slate-900 border border-slate-200/20 group">
+                
+                <!-- Contenido de Audio -->
+                <div class="flex-1 text-center md:text-left w-full">
+                    <span class="inline-block py-1 px-3 rounded-full bg-geo/20 text-geo-light font-semibold tracking-wider uppercase text-xs mb-4">Contenido Exclusivo</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">El Futuro de las Energías Renovables</h2>
+                    <p class="text-slate-300 text-base md:text-lg mb-8 leading-relaxed font-light">
+                        Escucha este debate profundo donde nuestros ingenieros y analistas discuten los desafíos, innovaciones y el panorama global de la transición energética en la próxima década.
+                    </p>
                     
-                    <!-- Panel Geotermia (Activo por defecto) -->
-                    <!-- NOTA: Se actualiza a .jpg según los archivos subidos -->
-                    <div id="panel-geotermia" class="tab-panel active">
-                        <img src="geotermia.png" onerror="this.src='https://images.unsplash.com/photo-1541014902120-0322301362e9?auto=format&fit=crop&q=80&w=1200'" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" alt="Planta Geotérmica">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                            <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-300 backdrop-blur-md rounded-full text-xs font-bold tracking-wider mb-4 border border-emerald-500/30">ESPECIALIDAD TÉCNICA</span>
-                            <h3 class="text-3xl md:text-5xl font-bold text-white mb-4 font-heading">Geotermia Profunda</h3>
-                            <p class="text-slate-200 text-lg md:text-xl mb-6 max-w-2xl leading-relaxed font-light">
-                                Desarrollo integral de campos geotérmicos. Realizamos estudios de factibilidad, supervisión de perforación exploratoria, y diseño de plantas de ciclo binario y flash para corporaciones mineras e industriales.
-                            </p>
-                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Evaluación térmica de reservorios</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Ingeniería de perforación profunda</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Diseño de plantas (Flash & Binario)</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Mantenimiento de pozos productores</li>
-                            </ul>
-                        </div>
+                    <!-- REPRODUCTOR DE AUDIO -->
+                    <div class="bg-white/10 backdrop-blur p-3 rounded-2xl w-full border border-white/10 shadow-lg">
+                        <audio controls class="w-full h-12 outline-none rounded-xl" preload="metadata">
+                            <source src="debate.m4a" type="audio/mp4">
+                            <source src="debate.mp3" type="audio/mpeg">
+                            Tu navegador no soporta la reproducción de audio.
+                        </audio>
                     </div>
-
-                    <!-- Panel Solar -->
-                    <div id="panel-solar" class="tab-panel">
-                        <img src="solar.png" onerror="this.src='https://images.unsplash.com/photo-1509391366360-fe5bb584852a?auto=format&fit=crop&q=80&w=1200'" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" alt="Paneles Solares">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                            <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-300 backdrop-blur-md rounded-full text-xs font-bold tracking-wider mb-4 border border-emerald-500/30">TECNOLOGÍA DE VANGUARDIA</span>
-                            <h3 class="text-3xl md:text-5xl font-bold text-white mb-4 font-heading">Solar Fotovoltaica</h3>
-                            <p class="text-slate-200 text-lg md:text-xl mb-6 max-w-2xl leading-relaxed font-light">
-                                Proyectos <em>Utility-scale</em> y generación distribuida para grandes superficies. Utilizamos tecnología bifacial y sistemas de seguimiento inteligente (trackers) para optimizar la curva de generación diaria.
-                            </p>
-                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Diseños de parques a gran escala</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Integración de sistemas BESS (Baterías)</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Estudios de viabilidad e irradiación</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Optimización O&M predictivo</li>
-                            </ul>
-                        </div>
+                    <div class="flex justify-between items-center mt-4 px-2">
+                        <p class="text-xs text-slate-400 font-medium">Duración: 45 min</p>
+                        <p class="text-xs text-slate-400 font-medium flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            Alta Fidelidad
+                        </p>
                     </div>
-
-                    <!-- Panel Eólica -->
-                    <div id="panel-eolica" class="tab-panel">
-                        <img src="eolica.png" onerror="this.src='https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=1200'" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" alt="Aerogeneradores">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                            <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-300 backdrop-blur-md rounded-full text-xs font-bold tracking-wider mb-4 border border-emerald-500/30">MÁXIMO RENDIMIENTO</span>
-                            <h3 class="text-3xl md:text-5xl font-bold text-white mb-4 font-heading">Energía Eólica</h3>
-                            <p class="text-slate-200 text-lg md:text-xl mb-6 max-w-2xl leading-relaxed font-light">
-                                Gestión técnica integral de parques <em>onshore</em> y <em>offshore</em>. Proporcionamos análisis de recurso avanzado y micrositing para la óptima ubicación de aerogeneradores, maximizando la producción (AEP).
-                            </p>
-                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Campañas anemométricas LIDAR</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Certificación de producción energética</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Due Diligence técnico y comercial</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Modelado aerodinámico (Micrositing)</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Panel Biomasa -->
-                    <div id="panel-biomasa" class="tab-panel">
-                        <img src="biomasa.png" onerror="this.src='https://images.unsplash.com/photo-1536849460588-696219a9e98d?auto=format&fit=crop&q=80&w=1200'" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" alt="Planta de Biomasa">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                            <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-300 backdrop-blur-md rounded-full text-xs font-bold tracking-wider mb-4 border border-emerald-500/30">ECONOMÍA CIRCULAR</span>
-                            <h3 class="text-3xl md:text-5xl font-bold text-white mb-4 font-heading">Biomasa & Biogás</h3>
-                            <p class="text-slate-200 text-lg md:text-xl mb-6 max-w-2xl leading-relaxed font-light">
-                                Transformación de pasivos ambientales en activos energéticos. Diseñamos plantas de cogeneración a partir de residuos industriales, forestales y agrícolas, implementando economía circular pura en tu cadena de valor.
-                            </p>
-                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Diseño de digestores anaerobios</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Plantas de cogeneración (CHP)</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Logística y caracterización de combustible</li>
-                                <li class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Tratamiento de efluentes y emisiones</li>
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Sección de Resumen -->
-    <section class="py-20 bg-white border-t border-slate-100" id="servicios">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-            <h2 class="text-4xl font-bold text-slate-900 mb-12 font-heading">¿Por qué elegir a GEOCONSULT?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-slate-50 p-10 rounded-[2rem] border border-slate-100 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-emerald-500 mb-6 mx-auto shadow-sm border border-slate-100">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-slate-900 font-heading">Confiabilidad</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Estándares internacionales en cada análisis y proyección financiera de tus plantas generadoras para asegurar la viabilidad a largo plazo.</p>
+    <!-- FOOTER -->
+    <footer id="contacto" class="bg-slate-950 pt-16 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <!-- Columna 1: Marca -->
+                <div class="flex flex-col items-center md:items-start">
+                    <a href="#" class="flex items-center gap-3 mb-4">
+                        <img class="h-10 w-auto opacity-90 transition-opacity hover:opacity-100" 
+                             src="logo.png" 
+                             alt="GEOCONSULT"
+                             onerror="this.onerror=null; this.src='https://placehold.co/120x40/059669/ffffff?text=LOGO'">
+                    </a>
+                    <p class="text-slate-400 text-sm text-center md:text-left leading-relaxed">
+                        Líderes en consultoría estratégica para la transición hacia energías limpias y sostenibles.
+                    </p>
                 </div>
-                <div class="bg-slate-50 p-10 rounded-[2rem] border border-slate-100 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-emerald-500 mb-6 mx-auto shadow-sm border border-slate-100">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-slate-900 font-heading">Eficiencia Operativa</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Maximizamos el factor de planta (Capacity Factor) implementando la última tecnología y mejores prácticas de mantenimiento del sector.</p>
+                
+                <!-- Columna 2: Enlaces -->
+                <div class="flex flex-col items-center md:items-start">
+                    <h4 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-center md:text-left">
+                        <li><a href="#inicio" class="text-slate-400 hover:text-geo transition-colors text-sm">Inicio</a></li>
+                        <li><a href="#especialidades" class="text-slate-400 hover:text-geo transition-colors text-sm">Especialidades</a></li>
+                        <li><a href="#debate" class="text-slate-400 hover:text-geo transition-colors text-sm">Podcast</a></li>
+                    </ul>
                 </div>
-                <div class="bg-slate-50 p-10 rounded-[2rem] border border-slate-100 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-emerald-500 mb-6 mx-auto shadow-sm border border-slate-100">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-slate-900 font-heading">Sostenibilidad Global</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Garantizamos el cumplimiento normativo ambiental y los criterios ESG para generar un impacto positivo y real en el medio ambiente.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white pt-16 pb-8" id="contacto">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 border-b border-slate-800 pb-12">
-            <div>
-                <div class="flex items-center gap-3 mb-6">
-                    <!-- Logo integrado en el footer -->
-                    <img src="logo.jpg" alt="Logo Geoconsult" class="h-10 w-auto object-contain brightness-0 invert opacity-90" onerror="this.style.display='none'">
-                    <span class="text-3xl font-bold tracking-tight text-white font-heading">GEOCONSULT</span>
+                <!-- Columna 3: Contacto -->
+                <div class="flex flex-col items-center md:items-start">
+                    <h4 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Contáctanos</h4>
+                    <p class="text-slate-400 text-sm mb-2">contacto@geoconsult.com</p>
+                    <p class="text-slate-400 text-sm mb-4">+52 (55) 1234-5678</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-geo hover:text-white transition-all">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <p class="text-slate-400 text-sm max-w-sm leading-relaxed">Elevando los estándares de la ingeniería en energías renovables. Somos tu aliado estratégico hacia la transición energética sustentable.</p>
             </div>
-            <div class="md:text-right flex flex-col md:items-end justify-center">
-                <h4 class="font-bold text-lg mb-4 text-emerald-400 font-heading">Ponte en Contacto</h4>
-                <a href="mailto:info@geoconsult.com" class="text-slate-300 hover:text-white transition-colors text-base mb-2 block">info@geoconsult.com</a>
-                <p class="text-slate-300 text-base">+52 (55) 1234-5678</p>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="opacity-50 text-sm">&copy; 2026 GEOCONSULT S.A. Todos los derechos reservados.</p>
-            <div class="flex gap-4 opacity-50 text-sm">
-                <a href="#" class="hover:text-emerald-400 transition-colors">Términos</a>
-                <a href="#" class="hover:text-emerald-400 transition-colors">Privacidad</a>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-sm text-center">
+                    &copy; 2024 GEOCONSULT Consultoría en Energías Renovables. Todos los derechos reservados.
+                </p>
+                <div class="flex gap-4 text-sm text-slate-500">
+                    <a href="#" class="hover:text-slate-300 transition-colors">Aviso de Privacidad</a>
+                    <a href="#" class="hover:text-slate-300 transition-colors">Términos legales</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Script para interactividad del menú -->
+    <!-- Lógica sencilla para el Menú Móvil -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const panels = document.querySelectorAll('.tab-panel');
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remover 'active' de todas las pestañas y paneles
-                    tabs.forEach(t => t.classList.remove('active'));
-                    panels.forEach(p => p.classList.remove('active'));
-
-                    // Agregar 'active' a la pestaña clicada
-                    tab.classList.add('active');
-
-                    // Mostrar el panel correspondiente
-                    const targetId = tab.getAttribute('data-target');
-                    const targetPanel = document.getElementById(targetId);
-                    if (targetPanel) {
-                        targetPanel.classList.add('active');
-                    }
-                });
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
             });
-
-            // Efecto de Navbar al hacer scroll
-            const nav = document.querySelector('nav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    nav.classList.add('py-0');
-                    nav.classList.remove('py-2');
-                } else {
-                    nav.classList.add('py-2');
-                    nav.classList.remove('py-0');
-                }
+            
+            // Cerrar menú al hacer clic en un enlace (Móvil)
+            const mobileLinks = menu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
             });
         });
     </script>
